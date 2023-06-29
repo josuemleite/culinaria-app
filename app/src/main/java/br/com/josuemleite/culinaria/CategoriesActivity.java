@@ -18,7 +18,7 @@ import java.util.List;
 import br.com.josuemleite.culinaria.adapter.CategoryAdapter;
 import br.com.josuemleite.culinaria.api.ApiClient;
 import br.com.josuemleite.culinaria.api.ApiService;
-import br.com.josuemleite.culinaria.model.CategoriesResponse;
+import br.com.josuemleite.culinaria.model.CategoryResponse;
 import br.com.josuemleite.culinaria.model.Category;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,15 +68,15 @@ public class CategoriesActivity extends AppCompatActivity {
     }
 
     private void loadCategories() {
-        Call<CategoriesResponse> call = apiService.getCategories();
+        Call<CategoryResponse> call = apiService.getCategories();
 
-        call.enqueue(new Callback<CategoriesResponse>() {
+        call.enqueue(new Callback<CategoryResponse>() {
             @Override
-            public void onResponse(Call<CategoriesResponse> call, Response<CategoriesResponse> response) {
+            public void onResponse(Call<CategoryResponse> call, Response<CategoryResponse> response) {
                 if (response.isSuccessful()) {
-                    CategoriesResponse categoriesResponse = response.body();
-                    if (categoriesResponse != null) {
-                        List<Category> categories = categoriesResponse.getCategories();
+                    CategoryResponse categoryResponse = response.body();
+                    if (categoryResponse != null) {
+                        List<Category> categories = categoryResponse.getCategories();
 
                         categoryList.clear();
                         if (categories != null) {
@@ -91,7 +91,7 @@ public class CategoriesActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<CategoriesResponse> call, Throwable t) {
+            public void onFailure(Call<CategoryResponse> call, Throwable t) {
                 Log.e("CategoriesActivity", "Erro na chamada da API: " + t.getMessage());
             }
         });
