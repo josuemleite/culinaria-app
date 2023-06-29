@@ -83,8 +83,8 @@ public class RecipesListActivity extends AppCompatActivity implements RecipeAdap
     @Override
     public void onItemClick(Recipe recipe) {
         Intent intent = new Intent(this, RecipeDetailsActivity.class);
-        String recipeJson = new Gson().toJson(recipe);
-        intent.putExtra("recipeDetails", recipeJson);
+        intent.putExtra("recipeId", recipe.getId());
         startActivity(intent);
     }
+
 }
