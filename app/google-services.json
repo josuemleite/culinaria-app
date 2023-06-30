@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "905866203785",
+    "project_id": "culinariaapp",
+    "storage_bucket": "culinariaapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905866203785:android:df612bf8d829c0bbb66c58",
+        "android_client_info": {
+          "package_name": "br.com.josuemleite.culinaria"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "905866203785-b37kt6nmrihctg12ds357t5h0hat25fn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6MK9Gtu-jmqO7ZHPbP5_x5KfH-9Sos_w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "905866203785-b37kt6nmrihctg12ds357t5h0hat25fn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
