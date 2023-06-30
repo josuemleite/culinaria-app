@@ -2,7 +2,9 @@ package br.com.josuemleite.culinaria.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class RecipeDetails {
+import java.io.Serializable;
+
+public class RecipeDetails implements Serializable {
     @SerializedName("idMeal")
     private String id;
 
