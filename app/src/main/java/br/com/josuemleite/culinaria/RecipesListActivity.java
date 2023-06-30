@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import br.com.josuemleite.culinaria.api.ApiClient;
 import br.com.josuemleite.culinaria.api.ApiService;
@@ -38,13 +39,10 @@ public class RecipesListActivity extends AppCompatActivity implements RecipeAdap
         recipesRecyclerView = findViewById(R.id.recipesRecyclerView);
         recipesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Obtenha a categoria selecionada da activity anterior (CategoriesActivity)
         String selectedCategory = getIntent().getStringExtra("categoryName");
 
-        // Crie uma instância do ApiService usando a classe ApiClient
         ApiService apiService = ApiClient.getInstance().getApiService();
 
-        // Chame o método para obter as receitas da categoria selecionada
         Call<RecipeResponse> call = apiService.getRecipesByCategory(selectedCategory);
         call.enqueue(new Callback<RecipeResponse>() {
             @Override
@@ -58,7 +56,7 @@ public class RecipesListActivity extends AppCompatActivity implements RecipeAdap
 
             @Override
             public void onFailure(Call<RecipeResponse> call, Throwable t) {
-                // Trate o erro na chamada da API, se necessário
+                Toast.makeText(RecipesListActivity.this, "Erro ao consumir API", Toast.LENGTH_SHORT).show();
             }
         });
 
