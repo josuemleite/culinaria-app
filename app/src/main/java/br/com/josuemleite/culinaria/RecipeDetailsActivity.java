@@ -1,9 +1,5 @@
 package br.com.josuemleite.culinaria;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,7 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -21,15 +16,8 @@ import com.google.gson.Gson;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.com.josuemleite.culinaria.api.ApiClient;
-import br.com.josuemleite.culinaria.api.ApiService;
 import br.com.josuemleite.culinaria.fragments.RecipeDetailsFragment;
 import br.com.josuemleite.culinaria.model.Recipe;
-import br.com.josuemleite.culinaria.model.RecipeDetails;
-import br.com.josuemleite.culinaria.model.RecipeDetailsResponse;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class RecipeDetailsActivity extends AppCompatActivity {
 
@@ -43,6 +31,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private boolean isFavorite;
 
     private MenuItem favoriteMenuItem;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +64,19 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         // Exiba o título da receita na barra de ferramentas
         getSupportActionBar().setTitle(recipeTitle);
 
+        // Obtenha as receitas favoritas armazenadas nas preferências compartilhadas
+        preferences = getSharedPreferences(FAVORITES_PREFERENCES, MODE_PRIVATE);
+
+        // Verifique se a receita atual está nos favoritos
+        isFavorite = preferences.getBoolean(recipeId, false);
+
         // Exiba o ícone de favorito com base no estado atual
         setFavoriteIcon();
 
         // Exiba o Fragment dos detalhes da receita
         showRecipeDetailsFragment();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -143,5 +139,13 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         // Substitua o conteúdo do recipeDetailsContainer pelo fragmento
         fragmentTransaction.replace(R.id.recipeDetailsContainer, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Salvar o estado de favoritos no SharedPreferences
+        preferences.edit().putBoolean(recipeId, isFavorite).apply();
     }
 }
