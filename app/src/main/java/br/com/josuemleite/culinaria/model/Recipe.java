@@ -14,6 +14,9 @@ public class Recipe implements Serializable {
     @SerializedName("strInstructions")
     private String instructions;
 
+    @SerializedName("strIngredient1")
+    private String ingredient1;
+
 
     public String getId() {
         return id;
@@ -25,5 +28,9 @@ public class Recipe implements Serializable {
 
     public String getInstructions() {
         return instructions;
+    }
+
+    public String getIngredient1() {
+        return ingredient1;
     }
 }

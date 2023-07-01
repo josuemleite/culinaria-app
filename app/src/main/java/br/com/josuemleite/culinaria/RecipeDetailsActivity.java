@@ -3,6 +3,7 @@ package br.com.josuemleite.culinaria;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,8 +19,14 @@ import com.google.gson.Gson;
 import java.util.HashSet;
 import java.util.Set;
 
+import br.com.josuemleite.culinaria.api.ApiClient;
+import br.com.josuemleite.culinaria.api.ApiService;
 import br.com.josuemleite.culinaria.fragments.RecipeDetailsFragment;
 import br.com.josuemleite.culinaria.model.Recipe;
+import br.com.josuemleite.culinaria.model.RecipeDetailsResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RecipeDetailsActivity extends AppCompatActivity {
 
@@ -42,12 +49,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String recipeJson = extras.getString("recipeJson");
-            Gson gson = new Gson();
-            Recipe recipe = gson.fromJson(recipeJson, Recipe.class);
-            recipeId = recipe.getId();
-            recipeTitle = recipe.getName();
-            recipeInstructions = recipe.getInstructions();
+            recipeId = extras.getString("recipeId");
+            recipeTitle = extras.getString("recipeTitle");
+            loadRecipeDetails();
         }
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
@@ -85,7 +89,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_share) {
-            shareRecipe(); // Chama o método para compartilhar a receita
+            shareRecipe();
             return true;
         }
         return super.onContextItemSelected(item);
@@ -166,5 +170,25 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         preferences.edit().putBoolean(recipeId, isFavorite).apply();
+    }
+
+    public void loadRecipeDetails() {
+        ApiService apiService = ApiClient.getInstance().getApiService();
+        Call<RecipeDetailsResponse> call = apiService.getRecipeDetailsById(recipeId);
+        call.enqueue(new Callback<RecipeDetailsResponse>() {
+            @Override
+            public void onResponse(Call<RecipeDetailsResponse> call, Response<RecipeDetailsResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Recipe recipeDetails = response.body().getRecipeDetails().get(0);
+                    recipeIngredients = recipeDetails.getIngredient1();
+                    recipeInstructions = recipeDetails.getInstructions();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RecipeDetailsResponse> call, Throwable t) {
+                Log.e("Login", "Erro ao conectar à API");
+            }
+        });
     }
 }
